@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="task_type_edit_project" model="ir.ui.view">
+        <field name="name">bs.task.add.modified.project.task.type.inherit</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_edit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='mail_template_id']" position="after">
+                <field name="require_module_name"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
