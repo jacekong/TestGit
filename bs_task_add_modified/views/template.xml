@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="asset_backend_bs_css" name="bs_task_add_css" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/css" href="/bs_task_add_modified/static/src/css/style.css"/>
+        </xpath>
+    </template>
+
+</odoo>
