@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_category_form_view_inherit_bs" model="ir.ui.view">
+        <field name="name">product.category.form.bs</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view" />
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="odoo_app" />
+            </field>
+        </field>
+    </record>
+
+    <record id="product_template_form_view_bs_task_odoo_app" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.bs.task.odoo.app</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <page name="invoicing" position="after">
+                <page string="Odoo App" name="bs_dev" attrs="{'invisible': [('odoo_app', '=', False)]}">
+                    <group name="odoo">
+                        <field name="module_id"/>
+                        <field name="link" widget="url" />
+                        <field name="support_ce"/>
+                        <field name="support_ee"/>
+                        <field name="install_seq"/>
+                    </group>
+                    <field name="odoo_app" invisible="1"/>
+                </page>
+            </page>
+        </field>
+    </record>
+
+    <record id="product_normal_form_view_product_bs_task" model="ir.ui.view">
+        <field name="name">bs.task.product.variants</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='can_be_expensed']" position="after">
+                <div>
+                    <field name="app_available" />
+                    <label for="app_available" />
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

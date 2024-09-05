@@ -1,0 +1,279 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <record id="view_task_search_form_project" model="ir.ui.view">
+        <field name="name">bs.task.add.modified.search.view</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='parent_id']" position="after">
+                <field name="product_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_project_view_form_ref" model="ir.ui.view">
+        <field name="name">project.project.view.form.ref</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_title']" position="replace">
+                <group>
+                    <group>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Project Name"/>
+                            </h1>
+                            <div name="options_active">
+                                <div>
+                                    <label for="label_tasks" class="oe_inline" string="Name of the tasks:"/>
+                                    <field name="label_tasks" class="oe_inline oe_input_align"/>
+                                </div>
+                            </div>
+                        </div>
+                    </group>
+                    <group>
+                        <field name="ref" />
+                        <field name="official_pro_name" />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- task view -->
+    <record id="project_task_inherit_bs_add" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.bs.add</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page/group/group/field[@name='product_id']" position="after">
+                <field name="dependency_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" />
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="responsible_by" />
+            </xpath>
+            <xpath expr="//field[@name='deploy_status_dev']" position="after">
+                <field name="deploy_db_dev" attrs="{'invisible': [('deploy_dev','=',False)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='deploy_status_prod']" position="after">
+                <field name="deploy_db_pd" attrs="{'invisible': [('deploy_prod','=',False)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='deploy_status_std']" position="after">
+                <field name="deploy_db_std" attrs="{'invisible': [('deploy_std','=', False)]}"/>
+            </xpath>
+            <!-- new field -->
+            <xpath expr="//notebook/page[@name='extra_info']/following-sibling::*" position="inside">
+                <div>
+                    <div>
+                        <h3 style="color:#7C7BAD;">Customization Details</h3>
+                    </div>
+                    <br/>
+                    <field name="customization_detail_ids">
+                        <tree>
+                            <field name="rec_index" />
+                            <field name="task_id" optional="1"/>
+                            <field name="description" class="text-wrap"/>
+                            <field name="sequence"/>
+                            <field name="link" widget="url"/>
+                            <field name="tested"/>
+                            <field name="tester"/>
+                            <field name="test_date"/>
+                            <field name="pass_status"/>
+                            <field name="field_status"/>
+                            <field name="field_name" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1" />
+                            <field name="related_field" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1" />
+                            <field name="field_type" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1"/>
+                            <field name="read_only" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1"/>
+                            <field name="stored" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1"/>
+                            <field name="pos_in_form_view" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1"/>
+                            <field name="field_action" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1"/>
+                            <field name="field_security_group" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1"/>
+                            <field name="field_objective" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1"/>
+                            <field name="field_remark" attrs="{'invisible': [('field_status', '!=', True)]}" optional="1"/>
+                        </tree>
+                    </field>
+                </div>
+            </xpath>
+            <xpath expr="//notebook/page[@name='description_page']" position="after">
+                <page name="solution" string="Solution">
+                    <field name="solution" type="html"/>
+                    <div class="d-none oe_clear"/>
+                </page>
+            </xpath>
+
+            <!-- task tab -->
+            <xpath expr="//page[@name='task_tab']" position="replace">
+                <page name="task_tab" string="Test Case">
+                    <field name="task_test_case_ids">
+                        <tree editable="bottom" create="1" delete="1">
+                            <field name="test_case_id"/>
+                            <field name="description"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+            <!-- process -->
+            <xpath expr="//page[@name='process_step']" position="replace">
+                <page name="process_step" string="Process Step">
+                    <field name="task_process_step_ids">
+                        <tree editable="bottom" create="1" delete="1">
+                            <field name="sequence" widget="handle"/>
+                            <field name="step_id"/>
+                            <field name="description"/>
+                            <field name="responsible_by"/>
+                            <field name="doc_and_report"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+            <!-- project ref -->
+            <xpath expr="//field[@name='code']/following-sibling::span[1]" position="after">
+                <field name="ref_name" class="oe_inline" readonly="1" />
+                <span class="oe_inline"> _ </span>
+            </xpath>
+
+            <!-- new -->
+            <xpath expr="//field[@name='source_reference']" position="after">
+                <field name="is_pain_point"/>
+                <field name="is_gap"/>
+                <field name="product_id_required" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//page/group/group/field[@name='product_id']" position="attributes">
+                <attribute name="attrs">{'required': [('stage_id', '!=', False), ('product_id_required', '=', True)]}</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_task_tree2_project" model="ir.ui.view">
+        <field name="name">project.task.add.modified.ref.view</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="ref_name" string="Project Ref."/>
+            </xpath>
+            <xpath expr="//field[@name='project_id']" position="after">
+                <field name="product_id" optional="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- master data -->
+    <!-- field type -->
+    <record model="ir.ui.view" id="field_type_view_form">
+        <field name="name">Field Type</field>
+        <field name="model">field.type</field>
+        <field name="arch" type="xml">
+            <form string="Tags">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="project_tags_tree_view">
+        <field name="name">Field Type</field>
+        <field name="model">field.type</field>
+        <field name="arch" type="xml">
+            <tree string="name">
+                <field name="name"/>
+                <field name="description" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="open_field_type_form" model="ir.actions.act_window">
+        <field name="name">Field Type</field>
+        <field name="res_model">field.type</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No Field type found. Let's create one!
+          </p>
+        </field>
+    </record>
+    <menuitem action="open_field_type_form" id="menu_field_type_config_project" name="Field Type" parent="project.menu_project_config" sequence="15"/>
+
+    <!-- customization detail -->
+    <record model="ir.ui.view" id="customization_detail_view_form">
+        <field name="name">Customization Detail</field>
+        <field name="model">customization.details</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="description"/>
+                            <field name="link" widget="url"/>
+                            <field name="field_status"/>
+                            <field name="field_name" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                            <field name="field_type" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                            <field name="stored" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                            <field name="required_field" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                            <field name="related_field" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                            <field name="pos_in_form_view" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                            <field name="field_action" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                            <field name="field_security_group" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                            <field name="field_objective" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                            <field name="field_remark" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="tester"/>
+                            <field name="tested"/>
+                            <field name="pass_status"/>
+                            <field name="test_date"/>
+                            <field name="tester_comment"/>
+                            <field name="dev_comment"/>
+                            <field name="read_only" attrs="{'invisible': [('field_status', '!=', True)]}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- product filter -->
+     <record id="product_template_search_view_product" model="ir.ui.view">
+        <field name="name">bs_task_add_modified.view.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <filter string="Odoo App" name="filter_odoo_app" domain="[('categ_id.odoo_app', '=', True)]"/>
+            </xpath>
+        </field>
+     </record>
+
+    <record id="action_got_to_product" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="view_id" ref="product.product_template_kanban_view"/>
+        <field name="search_view_id" ref="product.product_template_search_view"/>
+        <field name="context">{"search_default_filter_odoo_app":1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new product
+            </p>
+        </field>
+    </record>
+
+    <!-- menu product -->
+    <menuitem
+        id="bs_task_add_product_menu"
+        name="Products"
+        action="action_got_to_product"
+        parent="bs_project_implement.menu_project_master_data"
+        sequence="50"/>
+
+</odoo>
