@@ -1,6 +1,6 @@
 {
     'name': 'Bs add tasks, reference',
-    'version': '14.5.4',
+    'version': '14.6.4',
     'summary': '''
         refer task to project
     ''',
